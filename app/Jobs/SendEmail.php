@@ -9,6 +9,10 @@ class SendEmail implements ShouldQueue
 {
     use Queueable;
 
+    public int $tries = 10;
+    public int $maxExceptions = 3;
+//    public array $backoff = [2, 10, 20];
+
     /**
      * Create a new job instance.
      */
@@ -20,10 +24,14 @@ class SendEmail implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle()
     {
-        sleep(3);
+        throw new \Exception('failed!');
 
-        info('Sending email...');
+        return $this->release();
+    }
+
+    public function failed($e) {
+        info('Failed!');
     }
 }
